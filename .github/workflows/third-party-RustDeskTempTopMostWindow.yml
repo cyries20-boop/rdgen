@@ -38,6 +38,24 @@ jobs:
     env:
       build_output_dir: RustDeskTempTopMostWindow/WindowInjection/${{ inputs.platform }}/${{ inputs.configuration }}
     steps:
+    - uses: actions/cache@v4
+  name: Cache Cargo
+  with:
+    path: |
+      ~/.cargo/registry
+      ~/.cargo/git
+      target
+    key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+    restore-keys: |
+      ${{ runner.os }}-cargo-
+- uses: actions/cache@v4
+  name: Cache vcpkg
+  with:
+    path: |
+      build/vcpkg_installed
+      build/vcpkg
+    key: vcpkg-${{ env.VCPKG_COMMIT_ID }}-${{ runner.os }}
+
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
 
